@@ -1,53 +1,64 @@
-import { useState } from "react"
-import { Switch } from "@/components/ui/switch"
-import "./App.css"
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useSelector } from 'react-redux' // Import the useSelector hook
+import InputLabel from './components/InputLabel'
+import store, {
+	RootState,
+	setIsHonkaiTerm,
+	setTbLevel,
+	setCurrentExp,
+} from './store' // Import the actions and RootState from store
+import './App.css'
 
 function App() {
-	const terminologyMap: {
-		[key in
-			| "TrailBlaze Level"
-			| "Trailblaze Power"
-			| "Daily Training"
-			| "Stellar Jade"
-			| "Fuel"]: string
-	} = {
-		"TrailBlaze Level": "Adventure Rank",
-		"Trailblaze Power": "Resin",
-		"Daily Training": "Commission",
-		"Stellar Jade": "Primogem",
-		Fuel: "Fragile Resin",
-	}
-
-	const [isHonkaiTerm, setIsHonkaiTerm] = useState(true)
+	// Use useSelector to access state values from the Redux store
+	const terminologyMap = useSelector(
+		(state: RootState) => state.tbLevel.terminologyMap
+	)
+	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
+	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
 
 	return (
-		<div className="bg-slate-600 p-2 rounded-xl">
-			<div className="flex">
+		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
+			<div className="flex p-2">
 				<form action="">
-					<label className="block text-left" htmlFor="">
-						{getTerminology("TrailBlaze Level")}
-						<input
-							className="block rounded-md bg-slate-600 border-slate-00 border"
-							id="trailblazeLevel"
-							type="text"
-						/>
-					</label>
+					<InputLabel
+						label="Trailblaze Level"
+						value={tbLevel}
+						id={1}
+						set={(value) => store.dispatch(setTbLevel(value))}
+					/>
+					<InputLabel
+						label="Current EXP"
+						value={currentExp}
+						id={2}
+						set={(value) => store.dispatch(setCurrentExp(value))}
+					/>
 				</form>
 			</div>
-			<label>
-				<Switch onCheckedChange={handleToggle} />
-				Using {isHonkaiTerm ? "Honkai" : "Genshin"} Terminology
-			</label>
+
+			<span className="mb-1 font-bold">
+				Next {terminologyMap['Equilibrium']} Level
+			</span>
+
+			<span className="mb-1 font-bold">Terminology</span>
+			<Tabs
+				defaultValue="honkai"
+				className="w-[400px]"
+				onValueChange={handleToggle}
+			>
+				<TabsList className="bg-slate-400">
+					<TabsTrigger className="text-white" value="honkai">
+						Honkai: Star Rail
+					</TabsTrigger>
+					<TabsTrigger value="genshin">Genshin Impact</TabsTrigger>
+				</TabsList>
+			</Tabs>
 		</div>
 	)
 
-	function getTerminology(term: string) {
-		if (isHonkaiTerm) return term
-		return (terminologyMap as { [key: string]: string })[term]
-	}
-
-	function handleToggle() {
-		setIsHonkaiTerm(!isHonkaiTerm)
+	function handleToggle(term: string) {
+		// Dispatch the action to set the isHonkaiTerm value
+		store.dispatch(setIsHonkaiTerm(term === 'honkai'))
 	}
 }
 
