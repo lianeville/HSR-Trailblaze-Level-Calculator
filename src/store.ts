@@ -17,29 +17,30 @@ const terminologyMapGenshin: TerminologyMap = {
 	'Equilibrium': 'World',
 	'Fuel': 'Fragile Resin',
 }
-type EqulibriumExpReq = Array<{
-	levelNeeded: number
+type Equilibriums = Array<{
+	startingLv: number
+	lvNeeded: number
 	expUntilNext: number
 	income: number
 }>
-const equlibriumExpReq: EqulibriumExpReq = [
-	{ levelNeeded: 20, expUntilNext: 18250, income: 2200 },
-	{ levelNeeded: 30, expUntilNext: 39830, income: 2350 },
-	{ levelNeeded: 40, expUntilNext: 73910, income: 2500 },
-	{ levelNeeded: 50, expUntilNext: 121790, income: 2650 },
-	{ levelNeeded: 60, expUntilNext: 201250, income: 2800 },
-	{ levelNeeded: 65, expUntilNext: 318280, income: 2950 },
-	{ levelNeeded: 70, expUntilNext: 680480, income: 3100 },
+const equilibriums: Equilibriums = [
+	{ startingLv: 1, lvNeeded: 20, expUntilNext: 18250, income: 2200 },
+	{ startingLv: 20, lvNeeded: 30, expUntilNext: 21580, income: 2350 },
+	{ startingLv: 30, lvNeeded: 40, expUntilNext: 34080, income: 2500 },
+	{ startingLv: 40, lvNeeded: 50, expUntilNext: 47880, income: 2650 },
+	{ startingLv: 50, lvNeeded: 60, expUntilNext: 79460, income: 2800 },
+	{ startingLv: 60, lvNeeded: 65, expUntilNext: 117030, income: 2950 },
+	{ startingLv: 66, lvNeeded: 70, expUntilNext: 362200, income: 3100 },
 ]
-const equlibriums = [20, 30, 40, 50, 60, 65]
+const equilibriumTbLevels = [20, 30, 40, 50, 60, 65, 70]
 
-type TbLevelsCalcs = Array<{ current: string; total: string }> | null
+type TbLevels = Array<{ current: string; total: string; income: string }> | null
 
-let tbLevelCalcs: TbLevelsCalcs = null
+let tbLevels: TbLevels = null
 fetch('/tb-levels.json')
 	.then((response) => response.json())
 	.then((data) => {
-		tbLevelCalcs = data
+		tbLevels = data
 	})
 	.catch((error) => console.error('Error loading JSON file:', error))
 
@@ -53,6 +54,7 @@ interface InitialState {
 	remainingDays: number
 	// daysUntil: EqulibriumExpReq
 	goalEq: number
+	daysUntilGoal: number
 }
 const initialState: InitialState = {
 	terminologyMap: terminologyMapHSR,
@@ -64,6 +66,7 @@ const initialState: InitialState = {
 	remainingDays: 0,
 	// daysUntil: equlibriumExpReq,
 	goalEq: 1,
+	daysUntilGoal: 8.3,
 }
 
 // Create a slice
@@ -73,12 +76,17 @@ const tbLevelSlice = createSlice({
 	reducers: {
 		setTbLevel: (state, action) => {
 			if (action.payload > 70) action.payload = 70
+			if (action.payload < 1) action.payload = 1
 			state.tbLevel = action.payload
 			state.dailyTbPower
 			updateCalcs(state)
 		},
 		setCurrentExp: (state, action) => {
+			// if (!tbLevels) return
+			// const currentExp = tbLevels[state.tbLevel - 1].total
+			// state.currentExp = Number(currentExp) + action.payload
 			state.currentExp = action.payload
+			updateCalcs(state)
 		},
 		setIsHonkaiTerm: (state, action) => {
 			state.isHonkaiTerm = action.payload
@@ -90,19 +98,35 @@ const tbLevelSlice = createSlice({
 		},
 		setGoalEq: (state, action) => {
 			state.goalEq = Number(action.payload)
+			updateCalcs(state)
 		},
 	},
 })
 
 const updateCalcs = (state: InitialState) => {
-	console.log(state)
-	const higherNumbers = equlibriums.filter((number) => number > state.tbLevel)
-	const nextHighest = Math.min(...higherNumbers, 70)
-	state.nextEquilibrium = nextHighest
-	if (!tbLevelCalcs) return
+	const goal = state.goalEq
+	const startingLevel = state.tbLevel
+	const startingExp = state.currentExp
 
-	const goalLevel = tbLevelCalcs[nextHighest - 1]
-	if (!goalLevel) return
+	if (!tbLevels) return
+
+	const nextEqLevel = equilibriumTbLevels.filter(
+		(num) => num > startingLevel
+	)[0]
+	const expTillNextEq = Number(tbLevels[nextEqLevel].total)
+	const expIntoEq = Number(tbLevels[startingLevel - 1].total) + startingExp
+	const dailyIncome = Number(tbLevels[startingLevel - 1].income)
+
+	const currentEq = equilibriumTbLevels.indexOf(nextEqLevel) + 1
+
+	let days = (expTillNextEq - expIntoEq) / dailyIncome
+
+	for (let i = currentEq; i < goal; i++) {
+		const equilibrium = equilibriums[i]
+		days += equilibrium.expUntilNext / equilibrium.income
+	}
+
+	state.daysUntilGoal = Math.round(days * 1e1) / 1e1
 }
 
 // Export the action creators

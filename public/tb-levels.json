@@ -1,282 +1,352 @@
 [
     {
         "current": "0",
-        "total": "0"
+        "total": "0",
+        "income": "2200"
     },
     {
         "current": "450",
-        "total": "450"
+        "total": "450",
+        "income": "2200"
     },
     {
         "current": "500",
-        "total": "950"
+        "total": "950",
+        "income": "2200"
     },
     {
         "current": "550",
-        "total": "1500"
+        "total": "1500",
+        "income": "2200"
     },
     {
         "current": "610",
-        "total": "2110"
+        "total": "2110",
+        "income": "2200"
     },
     {
         "current": "670",
-        "total": "2780"
+        "total": "2780",
+        "income": "2200"
     },
     {
         "current": "720",
-        "total": "3500"
+        "total": "3500",
+        "income": "2200"
     },
     {
         "current": "780",
-        "total": "4280"
+        "total": "4280",
+        "income": "2200"
     },
     {
         "current": "840",
-        "total": "5120"
+        "total": "5120",
+        "income": "2200"
     },
     {
         "current": "900",
-        "total": "6020"
+        "total": "6020",
+        "income": "2200"
     },
     {
         "current": "960",
-        "total": "6980"
+        "total": "6980",
+        "income": "2200"
     },
     {
         "current": "1020",
-        "total": "8000"
+        "total": "8000",
+        "income": "2200"
     },
     {
         "current": "1070",
-        "total": "9070"
+        "total": "9070",
+        "income": "2200"
     },
     {
         "current": "1130",
-        "total": "10200"
+        "total": "10200",
+        "income": "2200"
     },
     {
         "current": "1190",
-        "total": "11390"
+        "total": "11390",
+        "income": "2200"
     },
     {
         "current": "1250",
-        "total": "12640"
+        "total": "12640",
+        "income": "2200"
     },
     {
         "current": "1310",
-        "total": "13950"
+        "total": "13950",
+        "income": "2200"
     },
     {
         "current": "1370",
-        "total": "15320"
+        "total": "15320",
+        "income": "2200"
     },
     {
         "current": "1430",
-        "total": "16750"
+        "total": "16750",
+        "income": "2350"
     },
     {
         "current": "1500",
-        "total": "18250"
+        "total": "18250",
+        "income": "2350"
     },
     {
         "current": "1600",
-        "total": "19850"
+        "total": "19850",
+        "income": "2350"
     },
     {
         "current": "1710",
-        "total": "21560"
+        "total": "21560",
+        "income": "2350"
     },
     {
         "current": "1830",
-        "total": "23390"
+        "total": "23390",
+        "income": "2350"
     },
     {
         "current": "1950",
-        "total": "25340"
+        "total": "25340",
+        "income": "2350"
     },
     {
         "current": "2080",
-        "total": "27420"
+        "total": "27420",
+        "income": "2350"
     },
     {
         "current": "2210",
-        "total": "29630"
+        "total": "29630",
+        "income": "2350"
     },
     {
         "current": "2350",
-        "total": "31980"
+        "total": "31980",
+        "income": "2350"
     },
     {
         "current": "2480",
-        "total": "34460"
+        "total": "34460",
+        "income": "2350"
     },
     {
         "current": "2620",
-        "total": "37080"
+        "total": "37080",
+        "income": "2500"
     },
     {
         "current": "2750",
-        "total": "39830"
+        "total": "39830",
+        "income": "2500"
     },
     {
         "current": "2850",
-        "total": "42680"
+        "total": "42680",
+        "income": "2500"
     },
     {
         "current": "2960",
-        "total": "45640"
+        "total": "45640",
+        "income": "2500"
     },
     {
         "current": "3080",
-        "total": "48720"
+        "total": "48720",
+        "income": "2500"
     },
     {
         "current": "3200",
-        "total": "51920"
+        "total": "51920",
+        "income": "2500"
     },
     {
         "current": "3330",
-        "total": "55250"
+        "total": "55250",
+        "income": "2500"
     },
     {
         "current": "3460",
-        "total": "58710"
+        "total": "58710",
+        "income": "2500"
     },
     {
         "current": "3600",
-        "total": "62310"
+        "total": "62310",
+        "income": "2500"
     },
     {
         "current": "3730",
-        "total": "66040"
+        "total": "66040",
+        "income": "2500"
     },
     {
         "current": "3870",
-        "total": "69910"
+        "total": "69910",
+        "income": "2650"
     },
     {
         "current": "4000",
-        "total": "73910"
+        "total": "73910",
+        "income": "2650"
     },
     {
         "current": "4140",
-        "total": "78050"
+        "total": "78050",
+        "income": "2650"
     },
     {
         "current": "4280",
-        "total": "82330"
+        "total": "82330",
+        "income": "2650"
     },
     {
         "current": "4430",
-        "total": "86760"
+        "total": "86760",
+        "income": "2650"
     },
     {
         "current": "4570",
-        "total": "91330"
+        "total": "91330",
+        "income": "2650"
     },
     {
         "current": "4710",
-        "total": "96040"
+        "total": "96040",
+        "income": "2650"
     },
     {
         "current": "4860",
-        "total": "100900"
+        "total": "100900",
+        "income": "2650"
     },
     {
         "current": "5000",
-        "total": "105900"
+        "total": "105900",
+        "income": "2650"
     },
     {
         "current": "5150",
-        "total": "111050"
+        "total": "111050",
+        "income": "2650"
     },
     {
         "current": "5300",
-        "total": "116350"
+        "total": "116350",
+        "income": "2800"
     },
     {
         "current": "5440",
-        "total": "121790"
+        "total": "121790",
+        "income": "2800"
     },
     {
         "current": "5700",
-        "total": "127490"
+        "total": "127490",
+        "income": "2800"
     },
     {
         "current": "6150",
-        "total": "133640"
+        "total": "133640",
+        "income": "2800"
     },
     {
         "current": "6630",
-        "total": "140270"
+        "total": "140270",
+        "income": "2800"
     },
     {
         "current": "7130",
-        "total": "147400"
+        "total": "147400",
+        "income": "2800"
     },
     {
         "current": "7640",
-        "total": "155040"
+        "total": "155040",
+        "income": "2800"
     },
     {
         "current": "8170",
-        "total": "163210"
+        "total": "163210",
+        "income": "2800"
     },
     {
         "current": "8700",
-        "total": "171910"
+        "total": "171910",
+        "income": "2800"
     },
     {
         "current": "9230",
-        "total": "181140"
+        "total": "181140",
+        "income": "2800"
     },
     {
         "current": "9780",
-        "total": "190920"
+        "total": "190920",
+        "income": "2950"
     },
     {
         "current": "10330",
-        "total": "201250"
+        "total": "201250",
+        "income": "2950"
     },
     {
         "current": "20300",
-        "total": "221550"
+        "total": "221550",
+        "income": "2950"
     },
     {
         "current": "21780",
-        "total": "243330"
+        "total": "243330",
+        "income": "2950"
     },
     {
         "current": "23350",
-        "total": "266680"
+        "total": "266680",
+        "income": "2950"
     },
     {
         "current": "24970",
-        "total": "291650"
+        "total": "291650",
+        "income": "3100"
     },
     {
         "current": "26630",
-        "total": "318280"
+        "total": "318280",
+        "income": "3100"
     },
     {
         "current": "65070",
-        "total": "383350"
+        "total": "383350",
+        "income": "3100"
     },
     {
         "current": "68810",
-        "total": "452160"
+        "total": "452160",
+        "income": "3100"
     },
     {
         "current": "72490",
-        "total": "524650"
+        "total": "524650",
+        "income": "3100"
     },
     {
         "current": "76120",
-        "total": "600770"
+        "total": "600770",
+        "income": "3100"
     },
     {
         "current": "79710",
-        "total": "680480"
+        "total": "680480",
+        "income": "3100"
     }
 ]

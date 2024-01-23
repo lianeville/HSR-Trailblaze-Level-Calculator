@@ -20,8 +20,7 @@ function InputLabel({
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
-		console.log('hi')
-		set(1)
+		// set(1)
 	}, [])
 
 	function handleInputChange() {
@@ -33,10 +32,7 @@ function InputLabel({
 			// min = 1
 		}
 		const inputValue = inputRef.current.value.replace(/\D/g, '')
-		console.log(set, inputValue)
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), limit))
-		console.log(TbLevel)
-		console.log(currentExp)
 	}
 
 	return (

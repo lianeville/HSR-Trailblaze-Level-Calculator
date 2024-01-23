@@ -9,7 +9,7 @@ import store, {
 	setCurrentExp,
 } from './store' // Import the actions and RootState from store
 import './App.css'
-import JsonFormatter from 'react-json-formatter'
+// import JsonFormatter from 'react-json-formatter'
 
 function App() {
 	// Use useSelector to access state values from the Redux store
@@ -24,7 +24,10 @@ function App() {
 	// const remainingDays = useSelector(
 	// 	(state: RootState) => state.tbLevel.remainingDays
 	// )
-	const goalEq = useSelector((state: RootState) => state.tbLevel)
+	// const eqData = useSelector((state: RootState) => state.tbLevel)
+	const daysUntilGoal = useSelector(
+		(state: RootState) => state.tbLevel.daysUntilGoal
+	)
 
 	const eqLoop = [
 		{ eq: '1', level: 20 },
@@ -33,14 +36,14 @@ function App() {
 		{ eq: '4', level: 50 },
 		{ eq: '5', level: 60 },
 		{ eq: '6', level: 65 },
-		{ eq: 'lv 70', level: 70 },
+		{ eq: '7', level: 70 },
 	]
 
-	const jsonStyle = {
-		propertyStyle: { color: '#3498db' }, // Blue color for properties
-		stringStyle: { color: '#2ecc71' }, // Green color for strings
-		numberStyle: { color: '#e74c3c' }, // Red color for numbers
-	}
+	// const jsonStyle = {
+	// 	propertyStyle: { color: '#3498db' }, // Blue color for properties
+	// 	stringStyle: { color: '#2ecc71' }, // Green color for strings
+	// 	numberStyle: { color: '#e74c3c' }, // Red color for numbers
+	// }
 
 	return (
 		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
@@ -70,26 +73,29 @@ function App() {
 					<TabsList className="bg-slate-400">
 						{eqLoop.map((item, index) => (
 							<TabsTrigger
-								disabled={item.level < tbLevel}
+								disabled={item.level <= tbLevel}
 								value={item.eq}
 								key={index}
 							>
-								{item.eq}
+								{item.eq == '7' ? 'lv 70' : item.eq}
 							</TabsTrigger>
 						))}
 					</TabsList>
 				</Tabs>
 			</div>
 
+			<span>Expected Finish Date:</span>
+			<span className="text-xl font-bold">{daysUntilGoal} days</span>
+
 			{/* <span>goal eq {goalEq}</span> */}
 
-			<div className="text-left">
+			{/* <div className="text-left">
 				<JsonFormatter
-					json={JSON.stringify(goalEq)}
+					json={JSON.stringify(eqData)}
 					tabWith={4}
 					jsonStyle={jsonStyle}
 				/>
-			</div>
+			</div> */}
 
 			{/* {nextEquilibrium < 71 && (
 				<>
