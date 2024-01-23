@@ -1,5 +1,6 @@
+import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useSelector } from 'react-redux' // Import the useSelector hook
+import { useSelector, useDispatch } from 'react-redux' // Import the useSelector hook
 import InputLabel from './components/InputLabel'
 import store, {
 	RootState,
@@ -7,12 +8,11 @@ import store, {
 	setTbLevel,
 	setGoalEq,
 	setCurrentExp,
+	fetchTbLevels,
 } from './store' // Import the actions and RootState from store
 import './App.css'
-// import JsonFormatter from 'react-json-formatter'
 
 function App() {
-	// Use useSelector to access state values from the Redux store
 	const terminologyMap = useSelector(
 		(state: RootState) => state.tbLevel.terminologyMap
 	)
@@ -20,32 +20,18 @@ function App() {
 	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
 	const goalEq = useSelector((state: RootState) => state.tbLevel.goalEq)
 
-	// const nextEquilibrium = useSelector(
-	// 	(state: RootState) => state.tbLevel.nextEquilibrium
-	// )
-	// const remainingDays = useSelector(
-	// 	(state: RootState) => state.tbLevel.remainingDays
-	// )
-	// const eqData = useSelector((state: RootState) => state.tbLevel)
 	const daysUntilGoal = useSelector(
 		(state: RootState) => state.tbLevel.daysUntilGoal
 	)
+	const equilibriumTbLevels = useSelector(
+		(state: RootState) => state.tbLevel.equilibriumTbLevels
+	)
 
-	const eqLoop = [
-		{ eq: '1', level: 20 },
-		{ eq: '2', level: 30 },
-		{ eq: '3', level: 40 },
-		{ eq: '4', level: 50 },
-		{ eq: '5', level: 60 },
-		{ eq: '6', level: 65 },
-		{ eq: '7', level: 70 },
-	]
+	const dispatch = useDispatch()
 
-	// const jsonStyle = {
-	// 	propertyStyle: { color: '#3498db' }, // Blue color for properties
-	// 	stringStyle: { color: '#2ecc71' }, // Green color for strings
-	// 	numberStyle: { color: '#e74c3c' }, // Red color for numbers
-	// }
+	useEffect(() => {
+		dispatch(fetchTbLevels())
+	}, [dispatch]) // Dependency array ensures that the effect runs only once after the initial render
 
 	return (
 		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
@@ -73,22 +59,24 @@ function App() {
 					onValueChange={switchWorldLevel}
 				>
 					<TabsList className="bg-slate-400">
-						{eqLoop.map((item, index) => (
+						{equilibriumTbLevels.map((eqReqTbLevel, index) => (
 							<TabsTrigger
-								disabled={item.level <= tbLevel}
-								value={item.eq}
+								disabled={eqReqTbLevel <= tbLevel}
+								value={(index + 1).toString()}
 								key={index}
-								data-state={Number(item.eq) == goalEq ? 'active' : 'inactive'}
+								data-state={index + 1 == goalEq ? 'active' : 'inactive'}
 							>
-								{item.eq == '7' ? 'lv 70' : item.eq}
+								{index + 1 == 7 ? 'lv 70' : index + 1}
 							</TabsTrigger>
 						))}
 					</TabsList>
 				</Tabs>
 			</div>
 
-			<span>Expected Finish Date to Reach {goalEq}:</span>
-			<span className="text-xl font-bold">{daysUntilGoal} days</span>
+			<div className="flex flex-col items-start p-1">
+				<span>Expected Finish Date to Reach {goalEq}:</span>
+				<span className="text-xl font-bold">{daysUntilGoal} days</span>
+			</div>
 
 			{/* <span>goal eq {goalEq}</span> */}
 

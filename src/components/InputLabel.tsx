@@ -23,28 +23,55 @@ function InputLabel({
 		// set(1)
 	}, [])
 
+	let scrollAmount = 100
+	let max = 79710
+	let min = 0
+	if (label === 'Trailblaze Level') {
+		scrollAmount = 1
+		max = 70
+		min = 1
+	}
+
 	function handleInputChange() {
 		if (!inputRef.current) return
-		let limit = 79710
-		// let min = 0
-		if (label === 'Trailblaze Level') {
-			limit = 70
-			// min = 1
-		}
 		const inputValue = inputRef.current.value.replace(/\D/g, '')
-		set(inputValue === '' ? 0 : Math.min(Number(inputValue), limit))
+		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
+	}
+
+	function handleScroll(e: WheelEvent) {
+		if (!inputRef.current) return
+
+		const delta = e.deltaY
+
+		const val = Number(inputRef.current.value)
+
+		if (delta > 0) {
+			// Scroll down, decrease value
+			inputRef.current.value = Math.max(val - scrollAmount, min).toString()
+		} else if (delta < 0) {
+			// Scroll up, increase value
+			inputRef.current.value = Math.min(val + scrollAmount, max).toString()
+		}
+		handleInputChange()
 	}
 
 	return (
-		<label className="block pt-1 text-left" htmlFor="">
+		<label className="relative block pt-1 text-left" htmlFor="">
 			<span className="font-bold">{terminologyMap[label] || label}</span>
-			<input
-				ref={inputRef}
-				className="border-slate-00 mt-1 block rounded-md border bg-slate-600 p-1"
-				type="text"
-				value={value}
-				onChange={handleInputChange}
-			/>
+			<div className="relative">
+				<input
+					ref={inputRef}
+					className="border-slate-00 mt-1 block rounded-md border bg-slate-600 p-1 pr-8" // Added pr-8 for additional right padding
+					type="text"
+					value={value}
+					onChange={handleInputChange}
+					onWheel={handleScroll}
+				/>
+				{/* <div className="absolute right-2 top-1/2 -translate-y-1/2 transform">
+					<div className="ml-2 inline-block h-0 w-0 border-b border-l border-r border-t border-solid border-white"></div>
+					<div className="ml-2 inline-block h-0 w-0 rotate-180 transform border-b border-l border-r border-t border-solid border-white"></div>
+				</div> */}
+			</div>
 		</label>
 	)
 }

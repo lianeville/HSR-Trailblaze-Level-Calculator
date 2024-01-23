@@ -1,4 +1,4 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { createSlice, configureStore, createAsyncThunk } from '@reduxjs/toolkit'
 
 type TerminologyMap = Record<string, string>
 const terminologyMapHSR: TerminologyMap = {
@@ -33,15 +33,18 @@ const equilibriums: Equilibriums = [
 	{ startingLv: 66, lvNeeded: 70, expUntilNext: 362200, income: 3100 },
 ]
 
-type TbLevels = Array<{ current: string; total: string; income: string }> | null
-
-let tbLevels: TbLevels = null
-fetch('/tb-levels.json')
-	.then((response) => response.json())
-	.then((data) => {
-		tbLevels = data
-	})
-	.catch((error) => console.error('Error loading JSON file:', error))
+export const fetchTbLevels = createAsyncThunk(
+	'tbLevel/fetchTbLevels',
+	async (_, { dispatch }) => {
+		try {
+			const response = await fetch('/tb-levels.json')
+			const data = await response.json()
+			dispatch(tbLevelSlice.actions.setTbLevels(data))
+		} catch (error) {
+			console.error('Error loading JSON file:', error)
+		}
+	}
+)
 
 interface InitialState {
 	terminologyMap: TerminologyMap
@@ -51,6 +54,7 @@ interface InitialState {
 	goalEq: number
 	daysUntilGoal: number
 	equilibriumTbLevels: Array<number>
+	tbLevels: Array<{ current: string; total: string; income: string }> | null
 }
 const initialState: InitialState = {
 	terminologyMap: terminologyMapHSR,
@@ -60,6 +64,7 @@ const initialState: InitialState = {
 	goalEq: 1,
 	daysUntilGoal: 8.3,
 	equilibriumTbLevels: [20, 30, 40, 50, 60, 65, 70],
+	tbLevels: null,
 }
 
 // Create a slice
@@ -96,6 +101,9 @@ const tbLevelSlice = createSlice({
 			state.goalEq = Number(action.payload)
 			updateCalcs(state)
 		},
+		setTbLevels: (state, action) => {
+			state.tbLevels = action.payload
+		},
 	},
 })
 
@@ -104,15 +112,21 @@ const updateCalcs = (state: InitialState) => {
 	const startingLevel = state.tbLevel
 	const startingExp = state.currentExp
 
-	if (!tbLevels) return
+	if (startingLevel >= 70) {
+		state.daysUntilGoal = 0
+		return
+	}
+
+	if (!state.tbLevels) return
 
 	const nextEqLevel = state.equilibriumTbLevels.filter(
 		(num) => num > startingLevel
 	)[0]
 
-	const expTillNextEq = Number(tbLevels[nextEqLevel - 1].total)
-	const expIntoEq = Number(tbLevels[startingLevel - 1].total) + startingExp
-	const dailyIncome = Number(tbLevels[startingLevel - 1].income)
+	const expTillNextEq = Number(state.tbLevels[nextEqLevel - 1].total)
+	const expIntoEq =
+		Number(state.tbLevels[startingLevel - 1].total) + startingExp
+	const dailyIncome = Number(state.tbLevels[startingLevel - 1].income)
 
 	const currentEq = state.equilibriumTbLevels.indexOf(nextEqLevel) + 1
 
