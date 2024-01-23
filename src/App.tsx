@@ -16,6 +16,12 @@ function App() {
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
 	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
+	const nextEquilibrium = useSelector(
+		(state: RootState) => state.tbLevel.nextEquilibrium
+	)
+	const remainingDays = useSelector(
+		(state: RootState) => state.tbLevel.remainingDays
+	)
 
 	return (
 		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
@@ -24,21 +30,24 @@ function App() {
 					<InputLabel
 						label="Trailblaze Level"
 						value={tbLevel}
-						id={1}
 						set={(value) => store.dispatch(setTbLevel(value))}
 					/>
 					<InputLabel
 						label="Current EXP"
 						value={currentExp}
-						id={2}
 						set={(value) => store.dispatch(setCurrentExp(value))}
 					/>
 				</form>
 			</div>
 
-			<span className="mb-1 font-bold">
-				Next {terminologyMap['Equilibrium']} Level
-			</span>
+			{nextEquilibrium < 71 && (
+				<>
+					<span className="mb-1 font-bold">
+						Next {terminologyMap['Equilibrium']} Level {nextEquilibrium}
+					</span>
+					<span>{remainingDays} days</span>
+				</>
+			)}
 
 			<span className="mb-1 font-bold">Terminology</span>
 			<Tabs

@@ -19,11 +19,10 @@ function InputLabel({
 
 	const inputRef = useRef<HTMLInputElement>(null)
 
-	// useEffect(() => {
-	// 	if (inputRef.current) {
-	// 		inputRef.current.focus()
-	// 	}
-	// }, [value])
+	useEffect(() => {
+		console.log('hi')
+		set(1)
+	}, [])
 
 	function handleInputChange() {
 		if (!inputRef.current) return
