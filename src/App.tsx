@@ -18,6 +18,8 @@ function App() {
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
 	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
+	const goalEq = useSelector((state: RootState) => state.tbLevel.goalEq)
+
 	// const nextEquilibrium = useSelector(
 	// 	(state: RootState) => state.tbLevel.nextEquilibrium
 	// )
@@ -76,6 +78,7 @@ function App() {
 								disabled={item.level <= tbLevel}
 								value={item.eq}
 								key={index}
+								data-state={Number(item.eq) == goalEq ? 'active' : 'inactive'}
 							>
 								{item.eq == '7' ? 'lv 70' : item.eq}
 							</TabsTrigger>
@@ -84,7 +87,7 @@ function App() {
 				</Tabs>
 			</div>
 
-			<span>Expected Finish Date:</span>
+			<span>Expected Finish Date to Reach {goalEq}:</span>
 			<span className="text-xl font-bold">{daysUntilGoal} days</span>
 
 			{/* <span>goal eq {goalEq}</span> */}
