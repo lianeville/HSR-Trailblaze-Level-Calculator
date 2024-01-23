@@ -1,5 +1,4 @@
-import { createSlice, configureStore, combineReducers } from '@reduxjs/toolkit'
-// const rootReducer = combineReducers({})
+import { createSlice, configureStore } from '@reduxjs/toolkit'
 
 type TerminologyMap = Record<string, string>
 const terminologyMapHSR: TerminologyMap = {
@@ -44,7 +43,6 @@ fetch('/tb-levels.json')
 	})
 	.catch((error) => console.error('Error loading JSON file:', error))
 
-// Define the initial state
 interface InitialState {
 	terminologyMap: TerminologyMap
 	tbLevel: number
@@ -53,9 +51,9 @@ interface InitialState {
 	isHonkaiTerm: boolean
 	dailyTbPower: number
 	remainingDays: number
-	daysUntil: EqulibriumExpReq
+	// daysUntil: EqulibriumExpReq
+	goalEq: number
 }
-
 const initialState: InitialState = {
 	terminologyMap: terminologyMapHSR,
 	tbLevel: 1,
@@ -64,7 +62,8 @@ const initialState: InitialState = {
 	isHonkaiTerm: true,
 	dailyTbPower: 3100,
 	remainingDays: 0,
-	daysUntil: equlibriumExpReq,
+	// daysUntil: equlibriumExpReq,
+	goalEq: 1,
 }
 
 // Create a slice
@@ -89,10 +88,13 @@ const tbLevelSlice = createSlice({
 				state.terminologyMap = terminologyMapGenshin
 			}
 		},
+		setGoalEq: (state, action) => {
+			state.goalEq = Number(action.payload)
+		},
 	},
 })
 
-const updateCalcs = (state) => {
+const updateCalcs = (state: InitialState) => {
 	console.log(state)
 	const higherNumbers = equlibriums.filter((number) => number > state.tbLevel)
 	const nextHighest = Math.min(...higherNumbers, 70)
@@ -101,37 +103,10 @@ const updateCalcs = (state) => {
 
 	const goalLevel = tbLevelCalcs[nextHighest - 1]
 	if (!goalLevel) return
-
-	let remainingExp = Number(goalLevel.total)
-	remainingExp -= tbLevelCalcs[state.tbLevel - 1].total
-	remainingExp -= state.currentExp
-
-	state.remainingDays = (remainingExp / state.dailyTbPower).toFixed(1)
-	console.log('remainingExp', remainingExp)
-	console.log('goalLevel ' + nextHighest, goalLevel)
 }
 
-// const updateDailyTbPower = (state) => {
-// 	const level = state.tbLevel
-// 	if (level < 20) {
-// 		return 2200
-// 	} else if (level < 30) {
-// 		return 2350
-// 	} else if (level < 40) {
-// 		return 2500
-// 	} else if (level < 50) {
-// 		return 2650
-// 	} else if (level < 60) {
-// 		return 2800
-// 	} else if (level < 65) {
-// 		return 2950
-// 	} else {
-// 		return 3100
-// 	}
-// }
-
 // Export the action creators
-export const { setTbLevel, setCurrentExp, setIsHonkaiTerm } =
+export const { setTbLevel, setCurrentExp, setIsHonkaiTerm, setGoalEq } =
 	tbLevelSlice.actions
 
 // Export the reducer

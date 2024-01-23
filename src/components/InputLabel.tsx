@@ -26,11 +26,11 @@ function InputLabel({
 
 	function handleInputChange() {
 		if (!inputRef.current) return
-		let limit = null
+		let limit = 79710
+		// let min = 0
 		if (label === 'Trailblaze Level') {
 			limit = 70
-		} else {
-			limit = 79710
+			// min = 1
 		}
 		const inputValue = inputRef.current.value.replace(/\D/g, '')
 		console.log(set, inputValue)

@@ -5,9 +5,11 @@ import store, {
 	RootState,
 	setIsHonkaiTerm,
 	setTbLevel,
+	setGoalEq,
 	setCurrentExp,
 } from './store' // Import the actions and RootState from store
 import './App.css'
+import JsonFormatter from 'react-json-formatter'
 
 function App() {
 	// Use useSelector to access state values from the Redux store
@@ -16,12 +18,29 @@ function App() {
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
 	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
-	const nextEquilibrium = useSelector(
-		(state: RootState) => state.tbLevel.nextEquilibrium
-	)
-	const remainingDays = useSelector(
-		(state: RootState) => state.tbLevel.remainingDays
-	)
+	// const nextEquilibrium = useSelector(
+	// 	(state: RootState) => state.tbLevel.nextEquilibrium
+	// )
+	// const remainingDays = useSelector(
+	// 	(state: RootState) => state.tbLevel.remainingDays
+	// )
+	const goalEq = useSelector((state: RootState) => state.tbLevel)
+
+	const eqLoop = [
+		{ eq: '1', level: 20 },
+		{ eq: '2', level: 30 },
+		{ eq: '3', level: 40 },
+		{ eq: '4', level: 50 },
+		{ eq: '5', level: 60 },
+		{ eq: '6', level: 65 },
+		{ eq: 'lv 70', level: 70 },
+	]
+
+	const jsonStyle = {
+		propertyStyle: { color: '#3498db' }, // Blue color for properties
+		stringStyle: { color: '#2ecc71' }, // Green color for strings
+		numberStyle: { color: '#e74c3c' }, // Red color for numbers
+	}
 
 	return (
 		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
@@ -39,35 +58,71 @@ function App() {
 					/>
 				</form>
 			</div>
+			<div className="p-1">
+				<span className="font-bold">
+					Goal {terminologyMap['Equilibrium']} Level
+				</span>
+				<Tabs
+					defaultValue="1"
+					className="w-[400px] py-1"
+					onValueChange={switchWorldLevel}
+				>
+					<TabsList className="bg-slate-400">
+						{eqLoop.map((item, index) => (
+							<TabsTrigger
+								disabled={item.level < tbLevel}
+								value={item.eq}
+								key={index}
+							>
+								{item.eq}
+							</TabsTrigger>
+						))}
+					</TabsList>
+				</Tabs>
+			</div>
 
-			{nextEquilibrium < 71 && (
+			{/* <span>goal eq {goalEq}</span> */}
+
+			<div className="text-left">
+				<JsonFormatter
+					json={JSON.stringify(goalEq)}
+					tabWith={4}
+					jsonStyle={jsonStyle}
+				/>
+			</div>
+
+			{/* {nextEquilibrium < 71 && (
 				<>
 					<span className="mb-1 font-bold">
 						Next {terminologyMap['Equilibrium']} Level {nextEquilibrium}
 					</span>
 					<span>{remainingDays} days</span>
 				</>
-			)}
-
-			<span className="mb-1 font-bold">Terminology</span>
-			<Tabs
-				defaultValue="honkai"
-				className="w-[400px]"
-				onValueChange={handleToggle}
-			>
-				<TabsList className="bg-slate-400">
-					<TabsTrigger className="text-white" value="honkai">
-						Honkai: Star Rail
-					</TabsTrigger>
-					<TabsTrigger value="genshin">Genshin Impact</TabsTrigger>
-				</TabsList>
-			</Tabs>
+			)} */}
+			<div className="p-1">
+				<span className="font-bold">Terminology</span>
+				<Tabs
+					defaultValue="honkai"
+					className="w-[400px] py-1"
+					onValueChange={toggleTerminology}
+				>
+					<TabsList className="bg-slate-400">
+						<TabsTrigger className="text-white" value="honkai">
+							Honkai: Star Rail
+						</TabsTrigger>
+						<TabsTrigger value="genshin">Genshin Impact</TabsTrigger>
+					</TabsList>
+				</Tabs>
+			</div>
 		</div>
 	)
 
-	function handleToggle(term: string) {
-		// Dispatch the action to set the isHonkaiTerm value
+	function toggleTerminology(term: string) {
 		store.dispatch(setIsHonkaiTerm(term === 'honkai'))
+	}
+
+	function switchWorldLevel(level: string) {
+		store.dispatch(setGoalEq(level))
 	}
 }
 
