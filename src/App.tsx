@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useSelector, useDispatch } from 'react-redux' // Import the useSelector hook
-import { Badge } from '@/components/ui/badge'
 import InputLabel from './components/InputLabel'
+import DataRow from './components/DataRow'
 import store, {
 	RootState,
 	setIsHonkaiTerm,
@@ -37,6 +37,29 @@ function App() {
 		dispatch(fetchTbLevels())
 	}, [])
 
+	const dataRows = [
+		{
+			label: terminologyMap['Daily Training'],
+			quantity: 5,
+			exp: equilibriumsData[goalEq == 7 ? 6 : goalEq]?.training,
+		},
+		{ label: terminologyMap['Trailblaze Power'], quantity: 240, exp: 10 },
+		{
+			label: 'Immersifiers',
+			quantity: goalEq > 1 ? 4 : 0,
+			exp: 200,
+			weekly: true,
+		},
+		{
+			label: 'Total',
+			quantity: 1,
+			weekly: true,
+			exp:
+				equilibriumsData[goalEq == 7 ? 6 : goalEq]?.income * 7 +
+				(goalEq > 1 ? 800 : 0),
+		},
+	]
+
 	return (
 		<div className="h-full w-full bg-slate-600 sm:h-auto sm:min-h-[720px] sm:min-w-[400px] sm:rounded-xl">
 			<div className="flex flex-col items-center">
@@ -45,7 +68,6 @@ function App() {
 					alt="HSR Logo"
 					className="-mb-[6rem] -mt-[5rem] scale-50"
 				/>
-				{/* <h2 className="text-xl font-bold">Trailblazer Level Calculator</h2> */}
 				<div className="flex w-full px-5">
 					<form action="" className="w-full">
 						<div className="flex w-full items-center justify-center">
@@ -120,107 +142,28 @@ function App() {
 
 						<div className="w-full">
 							<div className="flex flex-col items-start">
-								{goalEq < 7 && (
-									<>
-										<span className="p-2">
-											<span className="font-bold">Exp Earned</span> at{' '}
-											{terminologyMap['Equilibrium']} Level{' '}
-											{goalEq == 7 ? 6 : goalEq}:
-										</span>
-										<ul className="flex w-full flex-col text-left">
-											<li className="flex justify-between bg-slate-700 p-2">
-												×5 {terminologyMap['Daily Training']}
-												<div>
-													<span className="mx-1 font-bold">
-														{equilibriumsData[goalEq == 7 ? 6 : goalEq]
-															?.training * 5}{' '}
-														EXP
-													</span>
-													<Badge variant="secondary">Daily</Badge>
-												</div>
-											</li>
-
-											<li className="flex justify-between p-2">
-												×240 Daily {terminologyMap['Trailblaze Power']}
-												<div>
-													<span className="mx-1 font-bold">2400 EXP</span>
-													<Badge variant="secondary">Daily</Badge>
-												</div>
-											</li>
-
-											{goalEq > 1 && (
-												<li className="flex justify-between bg-slate-700 p-2">
-													×4 Immersifiers
-													<div>
-														<span className="mx-1 font-bold">800 EXP</span>
-														<Badge variant="secondary">Weekly</Badge>
-													</div>
-												</li>
-											)}
-
-											<li
-												className={`flex justify-between p-2 ${goalEq > 1 ? '' : 'bg-slate-700'}`}
-											>
-												Total
-												<div>
-													<span className="mx-1 font-bold">
-														{equilibriumsData[goalEq]?.income * 7 + 800} EXP
-													</span>
-													<Badge variant="secondary">Weekly</Badge>
-												</div>
-											</li>
-										</ul>
-									</>
-								)}
-
-								{goalEq == 7 && (
-									<>
-										<span className="p-2">
-											<span className="font-bold">Credits Earned</span> at Level
-											70:
-										</span>
-										<ul className="flex w-full flex-col text-left">
-											<li className="flex justify-between bg-slate-700 p-2">
-												×5 {terminologyMap['Daily Training']}
-												<div>
-													<span className="mx-1 font-bold">
-														{equilibriumsData[6]?.training * 5 * 10} Credits
-													</span>
-													<Badge variant="secondary">Daily</Badge>
-												</div>
-											</li>
-
-											<li className="flex justify-between p-2">
-												×240 Daily {terminologyMap['Trailblaze Power']}
-												<div>
-													<span className="mx-1 font-bold">24000 Credits</span>
-													<Badge variant="secondary">Daily</Badge>
-												</div>
-											</li>
-
-											<li className="flex justify-between bg-slate-700 p-2">
-												×4 Immersifiers
-												<div>
-													<span className="mx-1 font-bold">8000 Credits</span>
-													<Badge variant="secondary">Weekly</Badge>
-												</div>
-											</li>
-
-											<li
-												className={`flex justify-between p-2 ${goalEq > 1 ? '' : 'bg-slate-700'}`}
-											>
-												Total:
-												<div>
-													<span className="mx-1 font-bold">
-														{(equilibriumsData[6]?.income * 7 + 800) * 10}{' '}
-														Credits
-													</span>
-													<Badge variant="secondary">Weekly</Badge>
-												</div>
-											</li>
-										</ul>
-									</>
-								)}
+								<span className="p-2">
+									<span className="font-bold">
+										{goalEq === 7 ? 'Credits' : 'EXP'} Earned
+									</span>
+									<span> at </span>
+									{goalEq === 7
+										? 'Level 70'
+										: terminologyMap['Equilibrium'] + ' Level ' + goalEq}
+								</span>
+								<ul className="flex w-full flex-col text-left">
+									{dataRows.map((row, index) => (
+										<DataRow
+											label={row.label}
+											quantity={row.quantity}
+											exp={row.exp}
+											odd={index % 2 == 0}
+											key={index}
+											weekly={row.weekly}
+											isCredits={goalEq == 7}
+										/>
+									))}
+								</ul>
 							</div>
 						</div>
 					</div>

@@ -73,7 +73,7 @@ function InputLabel({
 			<div className="relative flex">
 				<input
 					ref={inputRef}
-					className="border-slate-00 ml-2 mt-1 w-full rounded-md border bg-slate-600 p-1"
+					className="ml-2 mt-1 w-full rounded-md border border-none bg-slate-500 p-2"
 					type="number"
 					value={value}
 					onChange={handleInputChange}
