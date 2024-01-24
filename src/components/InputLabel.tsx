@@ -1,6 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
+import { Slider } from '@/components/ui/slider'
 
 function InputLabel({
 	label,
@@ -15,19 +16,17 @@ function InputLabel({
 		(state: RootState) => state.tbLevel.terminologyMap
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
+	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
 	const tbLevels = useSelector((state: RootState) => state.tbLevel.tbLevels)
 	const inputRef = useRef<HTMLInputElement>(null)
-
-	useEffect(() => {
-		// set(1)
-	}, [])
+	const [isLevel] = useState(label == 'Trailblaze Level')
 
 	let max: number
 	let min: number
 	let scrollAmount: number
 
 	function setValuesForLabel(label, tbLevels, tbLevel) {
-		if (label === 'Trailblaze Level') {
+		if (isLevel) {
 			scrollAmount = 1
 			max = 70
 			min = 1
@@ -45,6 +44,14 @@ function InputLabel({
 
 		const inputValue = inputRef.current.value.replace(/\D/g, '')
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
+	}
+
+	function handleSlideChange(value: number[]) {
+		if (!inputRef.current || !tbLevels) return
+
+		inputRef.current.value = value[0].toString()
+		handleInputChange()
+		// set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
 	}
 
 	function handleScroll(e: WheelEvent) {
@@ -65,21 +72,25 @@ function InputLabel({
 	}
 
 	return (
-		<label className="relative block pt-1 text-left" htmlFor="">
+		<label className="relative block w-1/2 pt-1 text-left" htmlFor="">
 			<span className="font-bold">{terminologyMap[label] || label}</span>
-			<div className="relative">
+			<div className="relative flex w-full">
+				{tbLevels && (
+					<Slider
+						value={isLevel ? [tbLevel] : [currentExp]}
+						max={isLevel ? 70 : Number(tbLevels[tbLevel].current)}
+						step={isLevel ? 1 : 10}
+						onValueChange={handleSlideChange}
+					/>
+				)}
 				<input
 					ref={inputRef}
-					className="border-slate-00 mt-1 block rounded-md border bg-slate-600 p-1 pr-8" // Added pr-8 for additional right padding
+					className="border-slate-00 ml-2 mt-1 w-1/4 rounded-md border bg-slate-600 p-1"
 					type="text"
 					value={value}
 					onChange={handleInputChange}
 					onWheel={handleScroll}
 				/>
-				{/* <div className="absolute right-2 top-1/2 -translate-y-1/2 transform">
-					<div className="ml-2 inline-block h-0 w-0 border-b border-l border-r border-t border-solid border-white"></div>
-					<div className="ml-2 inline-block h-0 w-0 rotate-180 transform border-b border-l border-r border-t border-solid border-white"></div>
-				</div> */}
 			</div>
 		</label>
 	)
