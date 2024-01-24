@@ -34,7 +34,7 @@ function App() {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(fetchTbLevels())
+		dispatch(fetchTbLevels() as any)
 	}, [])
 
 	const dataRows = [
