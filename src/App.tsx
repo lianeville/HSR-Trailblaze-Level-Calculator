@@ -44,8 +44,8 @@ function App() {
 				className="-my-9 h-1/2 w-1/2"
 			/>
 			{/* <h2 className="text-xl font-bold">Trailblazer Level Calculator</h2> */}
-			<div className="flex w-full p-2">
-				<form action="" className="w-full">
+			<div className="flex p-2">
+				<form action="" className="w">
 					<div className="flex items-center justify-center">
 						<InputLabel
 							label="Trailblaze Level"

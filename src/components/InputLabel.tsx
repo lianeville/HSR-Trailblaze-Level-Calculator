@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
-import { Slider } from '@/components/ui/slider'
 
 function InputLabel({
 	label,
@@ -46,14 +45,6 @@ function InputLabel({
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
 	}
 
-	function handleSlideChange(value: number[]) {
-		if (!inputRef.current || !tbLevels) return
-
-		inputRef.current.value = value[0].toString()
-		handleInputChange()
-		// set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
-	}
-
 	function handleScroll(e: WheelEvent) {
 		if (!inputRef.current || !tbLevels) return
 
@@ -72,20 +63,12 @@ function InputLabel({
 	}
 
 	return (
-		<label className="relative block w-1/2 pt-1 text-left" htmlFor="">
+		<label className="relative block pt-1 text-left" htmlFor="">
 			<span className="font-bold">{terminologyMap[label] || label}</span>
-			<div className="relative flex w-full">
-				{tbLevels && (
-					<Slider
-						value={isLevel ? [tbLevel] : [currentExp]}
-						max={isLevel ? 70 : Number(tbLevels[tbLevel].current)}
-						step={isLevel ? 1 : 10}
-						onValueChange={handleSlideChange}
-					/>
-				)}
+			<div className="relative flex">
 				<input
 					ref={inputRef}
-					className="border-slate-00 ml-2 mt-1 w-1/4 rounded-md border bg-slate-600 p-1"
+					className="border-slate-00 ml-2 mt-1 rounded-md border bg-slate-600 p-1"
 					type="text"
 					value={value}
 					onChange={handleInputChange}
