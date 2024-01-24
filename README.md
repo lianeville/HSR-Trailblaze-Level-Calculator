@@ -13,7 +13,7 @@ A tracker for Honkai: Star Rail to determine how long it will take to reach high
 - Switch between Honkai: Star Rail and Genshin Impact terminology
 - View details about how much EXP or Credits you'll receive at each level
 
-![Trailblaze Level Calculator Demo]('public/Demo-Screenshot.png')
+![Trailblaze Level Calculator Demo](public/Demo-Screenshot.png)
 
 ### Technologies Used
 
