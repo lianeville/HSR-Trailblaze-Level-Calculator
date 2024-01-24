@@ -14,37 +14,46 @@ function InputLabel({
 	const terminologyMap = useSelector(
 		(state: RootState) => state.tbLevel.terminologyMap
 	)
-	const TbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
-	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
-
+	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
+	const tbLevels = useSelector((state: RootState) => state.tbLevel.tbLevels)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	useEffect(() => {
 		// set(1)
 	}, [])
 
-	let scrollAmount = 100
-	let max = 79710
-	let min = 0
-	if (label === 'Trailblaze Level') {
-		scrollAmount = 1
-		max = 70
-		min = 1
+	let max: number
+	let min: number
+	let scrollAmount: number
+
+	function setValuesForLabel(label, tbLevels, tbLevel) {
+		if (label === 'Trailblaze Level') {
+			scrollAmount = 1
+			max = 70
+			min = 1
+		} else {
+			scrollAmount = 100
+			max = Number(tbLevels[tbLevel].current)
+			min = 0
+		}
 	}
 
 	function handleInputChange() {
-		if (!inputRef.current) return
+		if (!inputRef.current || !tbLevels) return
+
+		setValuesForLabel(label, tbLevels, tbLevel)
+
 		const inputValue = inputRef.current.value.replace(/\D/g, '')
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
 	}
 
 	function handleScroll(e: WheelEvent) {
-		if (!inputRef.current) return
+		if (!inputRef.current || !tbLevels) return
 
-		const delta = e.deltaY
+		setValuesForLabel(label, tbLevels, tbLevel)
 
 		const val = Number(inputRef.current.value)
-
+		const delta = e.deltaY
 		if (delta > 0) {
 			// Scroll down, decrease value
 			inputRef.current.value = Math.max(val - scrollAmount, min).toString()

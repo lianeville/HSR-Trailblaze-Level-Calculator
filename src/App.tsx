@@ -26,27 +26,46 @@ function App() {
 	const equilibriumTbLevels = useSelector(
 		(state: RootState) => state.tbLevel.equilibriumTbLevels
 	)
+	const equilibriumsData = useSelector(
+		(state: RootState) => state.tbLevel.equilibriumsData
+	)
 
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		dispatch(fetchTbLevels())
-	}, [dispatch]) // Dependency array ensures that the effect runs only once after the initial render
+	}, [])
 
 	return (
 		<div className="flex flex-col items-center rounded-xl bg-slate-600 p-2">
+			<img
+				src="/Honkai-Star-Rail-Logo.png"
+				alt="HSR Logo"
+				className="-my-9 h-1/2 w-1/2"
+			/>
+			{/* <h2 className="text-xl font-bold">Trailblazer Level Calculator</h2> */}
 			<div className="flex p-2">
 				<form action="">
-					<InputLabel
-						label="Trailblaze Level"
-						value={tbLevel}
-						set={(value) => store.dispatch(setTbLevel(value))}
-					/>
-					<InputLabel
-						label="Current EXP"
-						value={currentExp}
-						set={(value) => store.dispatch(setCurrentExp(value))}
-					/>
+					<div className="flex items-center">
+						<InputLabel
+							label="Trailblaze Level"
+							value={tbLevel}
+							set={(value) => store.dispatch(setTbLevel(value))}
+						/>
+						<img
+							src="/trailblaze-power.webp"
+							alt=""
+							className="ml-2 mt-5 h-12 w-12"
+						/>
+					</div>
+					<div className="flex items-center">
+						<InputLabel
+							label="Current EXP"
+							value={currentExp}
+							set={(value) => store.dispatch(setCurrentExp(value))}
+						/>
+						<img src="/exp-icon.webp" alt="" className="ml-2 mt-5 h-12 w-12" />
+					</div>
 				</form>
 			</div>
 			<div className="p-1">
@@ -73,10 +92,25 @@ function App() {
 				</Tabs>
 			</div>
 
-			<div className="flex flex-col items-start p-1">
-				<span>Expected Finish Date to Reach {goalEq}:</span>
-				<span className="text-xl font-bold">{daysUntilGoal} days</span>
-			</div>
+			{tbLevel != 70 && (
+				<div>
+					<div className="flex flex-col items-start p-1">
+						<span>{terminologyMap['Equilibrium']} Level</span>
+						<span className="text-xl font-bold">
+							{equilibriumsData[goalEq - 1]?.lvNeeded}
+						</span>
+					</div>
+
+					<div>
+						<div className="flex flex-col items-start p-1">
+							<span>Expected To Reach In:</span>
+							<span className="m-1 rounded-md bg-slate-500 p-1 text-2xl font-bold">
+								{daysUntilGoal} days
+							</span>
+						</div>
+					</div>
+				</div>
+			)}
 
 			{/* <span>goal eq {goalEq}</span> */}
 

@@ -30,7 +30,7 @@ const equilibriums: Equilibriums = [
 	{ startingLv: 40, lvNeeded: 50, expUntilNext: 47880, income: 2650 },
 	{ startingLv: 50, lvNeeded: 60, expUntilNext: 79460, income: 2800 },
 	{ startingLv: 60, lvNeeded: 65, expUntilNext: 117030, income: 2950 },
-	{ startingLv: 66, lvNeeded: 70, expUntilNext: 362200, income: 3100 },
+	{ startingLv: 65, lvNeeded: 70, expUntilNext: 362200, income: 3100 },
 ]
 
 export const fetchTbLevels = createAsyncThunk(
@@ -54,6 +54,7 @@ interface InitialState {
 	goalEq: number
 	daysUntilGoal: number
 	equilibriumTbLevels: Array<number>
+	equilibriumsData: Equilibriums
 	tbLevels: Array<{ current: string; total: string; income: string }> | null
 }
 const initialState: InitialState = {
@@ -65,6 +66,7 @@ const initialState: InitialState = {
 	daysUntilGoal: 8.3,
 	equilibriumTbLevels: [20, 30, 40, 50, 60, 65, 70],
 	tbLevels: null,
+	equilibriumsData: equilibriums,
 }
 
 // Create a slice
@@ -77,17 +79,18 @@ const tbLevelSlice = createSlice({
 			if (action.payload < 1) action.payload = 1
 
 			state.tbLevel = action.payload
+			state.currentExp = 0
 
 			const nextEqLevel = state.equilibriumTbLevels.filter(
 				(num) => num > action.payload
 			)[0]
 			state.goalEq = state.equilibriumTbLevels.indexOf(nextEqLevel) + 1
 
-			updateCalcs(state)
+			updateDaysUntil(state)
 		},
 		setCurrentExp: (state, action) => {
 			state.currentExp = action.payload
-			updateCalcs(state)
+			updateDaysUntil(state)
 		},
 		setIsHonkaiTerm: (state, action) => {
 			state.isHonkaiTerm = action.payload
@@ -99,7 +102,7 @@ const tbLevelSlice = createSlice({
 		},
 		setGoalEq: (state, action) => {
 			state.goalEq = Number(action.payload)
-			updateCalcs(state)
+			updateDaysUntil(state)
 		},
 		setTbLevels: (state, action) => {
 			state.tbLevels = action.payload
@@ -107,7 +110,9 @@ const tbLevelSlice = createSlice({
 	},
 })
 
-const updateCalcs = (state: InitialState) => {
+const updateDaysUntil = (state: InitialState) => {
+	if (!state.tbLevels) return
+
 	const goal = state.goalEq
 	const startingLevel = state.tbLevel
 	const startingExp = state.currentExp
@@ -117,24 +122,27 @@ const updateCalcs = (state: InitialState) => {
 		return
 	}
 
-	if (!state.tbLevels) return
-
 	const nextEqLevel = state.equilibriumTbLevels.filter(
 		(num) => num > startingLevel
 	)[0]
+	const currentEq = state.equilibriumTbLevels.indexOf(nextEqLevel)
 
+	// calculate progress into next equilibrium
 	const expTillNextEq = Number(state.tbLevels[nextEqLevel - 1].total)
 	const expIntoEq =
 		Number(state.tbLevels[startingLevel - 1].total) + startingExp
 	const dailyIncome = Number(state.tbLevels[startingLevel - 1].income)
-
-	const currentEq = state.equilibriumTbLevels.indexOf(nextEqLevel) + 1
-
 	let days = (expTillNextEq - expIntoEq) / dailyIncome
 
-	for (let i = currentEq; i < goal; i++) {
+	// only give immersion bonus at eq 2
+	let weeklyBonus = currentEq >= 2 ? (days * 800) / 7 : 0
+	days -= days * (weeklyBonus / expTillNextEq)
+
+	// calculate next equilibriums
+	for (let i = currentEq + 1; i < goal; i++) {
 		const equilibrium = equilibriums[i]
 		days += equilibrium.expUntilNext / equilibrium.income
+		days -= days * (weeklyBonus / equilibrium.expUntilNext)
 	}
 
 	state.daysUntilGoal = Math.round(days * 1e1) / 1e1
