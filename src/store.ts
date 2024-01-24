@@ -22,15 +22,58 @@ type Equilibriums = Array<{
 	lvNeeded: number
 	expUntilNext: number
 	income: number
+	training: number
 }>
 const equilibriums: Equilibriums = [
-	{ startingLv: 1, lvNeeded: 20, expUntilNext: 18250, income: 2200 },
-	{ startingLv: 20, lvNeeded: 30, expUntilNext: 21580, income: 2350 },
-	{ startingLv: 30, lvNeeded: 40, expUntilNext: 34080, income: 2500 },
-	{ startingLv: 40, lvNeeded: 50, expUntilNext: 47880, income: 2650 },
-	{ startingLv: 50, lvNeeded: 60, expUntilNext: 79460, income: 2800 },
-	{ startingLv: 60, lvNeeded: 65, expUntilNext: 117030, income: 2950 },
-	{ startingLv: 65, lvNeeded: 70, expUntilNext: 362200, income: 3100 },
+	{
+		startingLv: 1,
+		lvNeeded: 20,
+		expUntilNext: 18250,
+		income: 2200,
+		training: 200,
+	},
+	{
+		startingLv: 20,
+		lvNeeded: 30,
+		expUntilNext: 21580,
+		income: 2350,
+		training: 230,
+	},
+	{
+		startingLv: 30,
+		lvNeeded: 40,
+		expUntilNext: 34080,
+		income: 2500,
+		training: 260,
+	},
+	{
+		startingLv: 40,
+		lvNeeded: 50,
+		expUntilNext: 47880,
+		income: 2650,
+		training: 290,
+	},
+	{
+		startingLv: 50,
+		lvNeeded: 60,
+		expUntilNext: 79460,
+		income: 2800,
+		training: 320,
+	},
+	{
+		startingLv: 60,
+		lvNeeded: 65,
+		expUntilNext: 117030,
+		income: 2950,
+		training: 350,
+	},
+	{
+		startingLv: 65,
+		lvNeeded: 70,
+		expUntilNext: 362200,
+		income: 3100,
+		training: 380,
+	},
 ]
 
 export const fetchTbLevels = createAsyncThunk(
@@ -76,7 +119,7 @@ const tbLevelSlice = createSlice({
 	reducers: {
 		setTbLevel: (state, action) => {
 			if (action.payload > 70) action.payload = 70
-			if (action.payload < 1) action.payload = 1
+			if (action.payload < 1) action.payload = 0
 
 			state.tbLevel = action.payload
 			state.currentExp = 0
@@ -112,6 +155,7 @@ const tbLevelSlice = createSlice({
 
 const updateDaysUntil = (state: InitialState) => {
 	if (!state.tbLevels) return
+	if (state.tbLevel < 1) return
 
 	const goal = state.goalEq
 	const startingLevel = state.tbLevel
