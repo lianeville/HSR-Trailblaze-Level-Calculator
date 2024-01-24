@@ -61,7 +61,7 @@ function App() {
 	]
 
 	return (
-		<div className="h-full w-full bg-slate-600 sm:h-auto sm:min-h-[720px] sm:min-w-[400px] sm:rounded-xl">
+		<div className="h-fit w-full bg-slate-600 sm:h-auto sm:min-h-[720px] sm:min-w-[400px] sm:rounded-xl">
 			<div className="flex flex-col items-center">
 				<img
 					src="/Honkai-Star-Rail-Logo.png"
@@ -101,7 +101,7 @@ function App() {
 						Goal {terminologyMap['Equilibrium']} Level
 					</span>
 					<Tabs
-						defaultValue="1"
+						value={goalEq.toString()}
 						className="py-1"
 						onValueChange={switchWorldLevel}
 					>
@@ -111,7 +111,6 @@ function App() {
 									disabled={eqReqTbLevel <= tbLevel}
 									value={(index + 1).toString()}
 									key={index}
-									data-state={index + 1 == goalEq ? 'active' : 'inactive'}
 								>
 									{index + 1 == 7 ? 'lv 70' : index + 1}
 								</TabsTrigger>

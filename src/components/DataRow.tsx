@@ -19,12 +19,14 @@ const DataRow: React.FC<DataRowProps> = ({
 	isCredits,
 }) => {
 	return (
-		<li className={`flex justify-between p-2 ${odd ? 'bg-slate-700' : ''}`}>
+		<li
+			className={`flex justify-between px-3 py-2 ${odd ? 'bg-slate-700' : ''}`}
+		>
 			<div>
 				{quantity != 1 && <span>×{quantity}</span>} {label}
 			</div>
 			<div>
-				<span className="mx-1 font-bold">
+				<span className="mx-2 font-bold">
 					{exp * quantity * (isCredits ? 10 : 1)}{' '}
 					{isCredits ? 'Credits' : 'EXP'}
 				</span>
