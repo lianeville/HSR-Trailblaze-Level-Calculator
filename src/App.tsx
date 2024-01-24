@@ -61,7 +61,7 @@ function App() {
 	]
 
 	return (
-		<div className="h-fit w-full bg-slate-600 sm:h-auto sm:min-h-[720px] sm:min-w-[400px] sm:rounded-xl">
+		<div className="h-fit min-h-[710px] w-full bg-slate-600 sm:h-auto sm:min-w-[400px] sm:rounded-xl">
 			<div className="flex flex-col items-center">
 				<img
 					src="/Honkai-Star-Rail-Logo.png"
