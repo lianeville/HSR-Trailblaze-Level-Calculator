@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
 
@@ -15,31 +15,15 @@ function InputLabel({
 		(state: RootState) => state.tbLevel.terminologyMap
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
-	const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
+	// const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
 	const tbLevels = useSelector((state: RootState) => state.tbLevel.tbLevels)
 	const inputRef = useRef<HTMLInputElement>(null)
 	const [isLevel] = useState(label == 'Trailblaze Level')
 
-	let max: number
-	let min: number
-	let scrollAmount: number
-
-	function setValuesForLabel(label, tbLevels, tbLevel) {
-		if (isLevel) {
-			scrollAmount = 1
-			max = 70
-			min = 0
-		} else {
-			scrollAmount = 100
-			max = Number(tbLevels[tbLevel].current)
-			min = 0
-		}
-	}
-
 	function handleInputChange() {
 		if (!inputRef.current || !tbLevels) return
 
-		setValuesForLabel(label, tbLevels, tbLevel)
+		let max = isLevel ? 70 : Number(tbLevels[tbLevel].current)
 
 		inputRef.current.value = inputRef.current.value
 			.replace(/^0+/, '')
@@ -49,23 +33,6 @@ function InputLabel({
 
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
 	}
-
-	// function handleScroll(e: WheelEvent) {
-	// 	if (!inputRef.current || !tbLevels) return
-
-	// 	setValuesForLabel(label, tbLevels, tbLevel)
-
-	// 	const val = Number(inputRef.current.value)
-	// 	const delta = e.deltaY
-	// 	if (delta > 0) {
-	// 		// Scroll down, decrease value
-	// 		inputRef.current.value = Math.max(val - scrollAmount, min).toString()
-	// 	} else if (delta < 0) {
-	// 		// Scroll up, increase value
-	// 		inputRef.current.value = Math.min(val + scrollAmount, max).toString()
-	// 	}
-	// 	handleInputChange()
-	// }
 
 	return (
 		<label className="relative block w-full pt-1 text-left" htmlFor="">
