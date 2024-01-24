@@ -38,15 +38,15 @@ function App() {
 	}, [])
 
 	return (
-		<div className=" bg-slate-600 sm:h-2/3 sm:w-2/3 sm:rounded-xl">
+		<div className="h-full w-full bg-slate-600 sm:h-auto sm:min-h-[720px] sm:min-w-[400px] sm:rounded-xl">
 			<div className="flex flex-col items-center">
 				<img
 					src="/Honkai-Star-Rail-Logo.png"
 					alt="HSR Logo"
-					className="-my-20 scale-50"
+					className="-mb-[6rem] -mt-[5rem] scale-50"
 				/>
 				{/* <h2 className="text-xl font-bold">Trailblazer Level Calculator</h2> */}
-				<div className="flex w-full p-2">
+				<div className="flex w-full px-5">
 					<form action="" className="w-full">
 						<div className="flex w-full items-center justify-center">
 							<InputLabel
@@ -100,19 +100,21 @@ function App() {
 
 				{tbLevel != 70 && tbLevel > 0 && (
 					<div className="flex w-full flex-col items-center">
-						<div className="flex flex-col items-start p-1">
-							<span>Goal {terminologyMap['Trailblaze Level']}</span>
-							<span className="text-xl font-bold">
-								{equilibriumsData[goalEq - 1]?.lvNeeded}
-							</span>
-						</div>
-
-						<div>
-							<div className="flex flex-col items-start p-1">
-								<span>Expected To Reach In:</span>
-								<span className="m-1 rounded-md bg-slate-500 p-1 text-2xl font-bold">
-									{daysUntilGoal} days
+						<div className="flex gap-x-5">
+							<div className="flex flex-col p-1">
+								<span>Goal {terminologyMap['Trailblaze Level']}</span>
+								<span className="m-1 rounded-md bg-slate-500 p-1 text-2xl font-bold shadow-lg">
+									{equilibriumsData[goalEq - 1]?.lvNeeded}
 								</span>
+							</div>
+
+							<div>
+								<div className="flex flex-col p-1">
+									<span>Expected To Reach In</span>
+									<span className="m-1 rounded-md bg-slate-500 p-1 text-2xl font-bold shadow-lg">
+										{daysUntilGoal} days
+									</span>
+								</div>
 							</div>
 						</div>
 
@@ -159,7 +161,7 @@ function App() {
 											<li
 												className={`flex justify-between p-2 ${goalEq > 1 ? '' : 'bg-slate-700'}`}
 											>
-												Total:
+												Total
 												<div>
 													<span className="mx-1 font-bold">
 														{equilibriumsData[goalEq]?.income * 7 + 800} EXP
@@ -224,7 +226,7 @@ function App() {
 					</div>
 				)}
 
-				<div className="p-1">
+				<div className="pb-3">
 					<span className="font-bold">Terminology</span>
 					<Tabs
 						defaultValue="honkai"

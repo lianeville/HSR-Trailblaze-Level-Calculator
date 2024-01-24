@@ -70,20 +70,13 @@
 	* {
 		@apply border-border text-gray-200;
 	}
+	html {
+		@apply h-full;
+	}
 	body {
-		@apply bg-background bg-slate-800 text-foreground;
+		@apply flex h-full bg-background bg-slate-800 text-foreground;
 	}
-}
-
-@layer base {
-	html,
-	body,
 	#root {
-		@apply relative m-0 h-[100vh] w-full p-0;
+		@apply flex h-full w-full items-center sm:h-auto sm:w-auto;
 	}
-}
-
-* {
-	min-width: 0;
-	box-sizing: border-box;
 }
