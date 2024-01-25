@@ -15,10 +15,9 @@ function InputLabel({
 		(state: RootState) => state.tbLevel.terminologyMap
 	)
 	const tbLevel = useSelector((state: RootState) => state.tbLevel.tbLevel)
-	// const currentExp = useSelector((state: RootState) => state.tbLevel.currentExp)
 	const tbLevels = useSelector((state: RootState) => state.tbLevel.tbLevels)
 	const inputRef = useRef<HTMLInputElement>(null)
-	const [isLevel] = useState(label == 'Trailblaze Level')
+	const [isLevel] = useState(label === 'Trailblaze Level')
 
 	function handleInputChange() {
 		if (!inputRef.current || !tbLevels) return
@@ -34,6 +33,10 @@ function InputLabel({
 		set(inputValue === '' ? 0 : Math.min(Number(inputValue), max))
 	}
 
+	function handleInputClick() {
+		inputRef.current?.select()
+	}
+
 	return (
 		<label className="relative block w-full pt-1 text-left" htmlFor="">
 			<span className="font-bold">{terminologyMap[label] || label}</span>
@@ -44,8 +47,8 @@ function InputLabel({
 					type="number"
 					value={value}
 					onChange={handleInputChange}
+					onClick={handleInputClick}
 					step={isLevel ? 1 : 100}
-					// onWheel={handleScroll}
 				/>
 			</div>
 		</label>
